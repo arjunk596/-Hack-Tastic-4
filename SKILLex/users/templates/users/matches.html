@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Matches</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-green-600 text-white p-4">
+        <h1 class="text-xl font-bold text-center">Skill Matches</h1>
+    </header>
+    <main class="container mx-auto p-6">
+        <div class="bg-white rounded-lg shadow-md p-4">
+            <h2 class="text-lg font-semibold mb-4">Available Matches</h2>
+            <ul>
+                {% for match in matches %}
+                    <li class="border-b border-gray-300 py-2 flex justify-between items-center">
+                        <div>
+                            <p class="text-sm text-gray-800">
+                                <strong>{{ match.user.username }}</strong>: 
+                                {{ match.skill_name }} ({{ match.level }})
+                            </p>
+                            <small class="text-gray-500">{{ match.description }}</small>
+                        </div>
+                        <form action="{% url 'request_match' match.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
+                                Request Match
+                            </button>
+                        </form>
+                    </li>
+                {% empty %}
+                    <p class="text-center text-gray-500">No matches found for this skill.</p>
+                {% endfor %}
+            </ul>
+        </div>
+    </main>
+    <footer class="bg-gray-800 text-white p-4 mt-6 text-center">
+        <a href="{% url 'dashboard' %}" class="hover:underline">Back to Dashboard</a>
+    </footer>
+</body>
+</html>

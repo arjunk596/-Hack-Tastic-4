@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ profile.user.username }}'s Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-green-600 text-white p-4">
+        <h1 class="text-xl font-bold text-center">{{ profile.user.username }}'s Profile</h1>
+    </header>
+    <main class="container mx-auto p-6">
+        <div class="bg-white rounded-lg shadow-md p-4">
+            <h2 class="text-lg font-semibold mb-4">Bio</h2>
+            <p>{{ profile.bio }}</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-4 mt-6">
+            <h2 class="text-lg font-semibold mb-4">Skills</h2>
+            {% if skills %}
+                <ul>
+                    {% for skill in skills %}
+                        <li>{{ skill.skill_name }} ({{ skill.level }})</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No skills listed.</p>
+            {% endif %}
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-4 mt-6">
+            <a href="{% url 'chat' profile.user.id %}" class="text-blue-500">Start Chat</a>
+        </div>
+    </main>
+</body>
+</html>

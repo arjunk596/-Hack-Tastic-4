@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <title>Dashboard</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
+
+        :root {
+            --primary-color: #20B2AA; /* Teal Blue */
+            --highlight-color: #00FFFF; /* Cyan */
+            --text-dark: #B2BEB5; /* Ash Gray */
+            --text-light: #E0E0E0;
+            --background-color: #262626; /* Charcoal Black */
+            --max-width: 1200px;
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Raleway", sans-serif;
+            background-color: var(--background-color); /* Charcoal Black */
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary-color); /* Teal Blue */
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            width: 100%;
+            border-bottom: 1px solid var(--text-light);
+        }
+
+        main {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 2rem auto;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1, h2 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-dark); /* Ash Gray */
+        }
+
+        h1 {
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            background-color: #212121;
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border-radius: 6px;
+            transition: transform 0.3s;
+        }
+
+        ul li:hover {
+            transform: translateY(-5px);
+        }
+
+        ul li strong {
+            font-weight: bold;
+            color: var(--primary-color); /* Teal Blue */
+        }
+
+        .actions a {
+            display: inline-block;
+            margin-right: 10px;
+            padding: 0.5rem 1rem;
+            background-color: var(--primary-color); /* Teal Blue */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .actions a:hover {
+            background-color: var(--highlight-color); /* Cyan */
+        }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .section-spacing {
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to your Dashboard</h1>
+    </header>
+    <main>
+        <section class="section-spacing">
+            <h2>Profile Information</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ profile_form.as_p }}
+                <button type="submit">Update Profile</button>
+            </form>
+        </section>
+        
+        <section>
+            <h2>Your Skills</h2>
+            {% if user_skills %}
+                <ul>
+                    {% for skill in user_skills %}
+                        <li>{{ skill.skill_name }} ({{ skill.level }})</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>You have not added any skills yet.</p>
+            {% endif %}
+        </section>
+
+        <div class="flex space-x-4 mb-6">
+            <a href="{% url 'add_skill' %}" 
+               class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                Add Skill
+            </a>
+            <a href="{% url 'match_users' %}" 
+               class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                Find Matches
+            </a>
+            <a href="{% url 'notifications' %}" 
+               class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">
+                Notifications
+            </a>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 Skillex. All rights reserved.</p>
+    </footer>
+
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const scrollRevealOption = {
+                distance: "50px",
+                origin: "bottom",
+                duration: 1000,
+            };
+
+            ScrollReveal().reveal("header h1", {
+                ...scrollRevealOption,
+                delay: 500,
+            });
+
+            ScrollReveal().reveal("main h2", {
+                ...scrollRevealOption,
+                delay: 1000,
+            });
+
+            ScrollReveal().reveal("main section", {
+                ...scrollRevealOption,
+                delay: 1500,
+            });
+
+            ScrollReveal().reveal(".actions a", {
+                ...scrollRevealOption,
+                delay: 2000,
+            });
+
+            ScrollReveal().reveal("footer p", {
+                ...scrollRevealOption,
+                delay: 2500,
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Register - SkillEx</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
+
+        :root {
+            --primary-color: #20B2AA; /* Teal Blue */
+            --highlight-color: #00FFFF; /* Cyan */
+            --text-dark: #B2BEB5; /* Ash Gray */
+            --text-light: #E0E0E0;
+            --background-color: #262626; /* Charcoal Black */
+            --max-width: 1200px;
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Raleway", sans-serif;
+            background-color: var(--background-color); /* Charcoal Black */
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .register__container {
+            background-color: #1e1e1e;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .register__container h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--text-dark); /* Ash Gray */
+        }
+
+        .register__form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .register__form input {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: var(--text-light);
+            outline: none;
+            transition: background-color 0.3s;
+        }
+
+        .register__form input:focus {
+            background-color: #444;
+        }
+
+        .register__form button {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--primary-color); /* Teal Blue */
+            color: var(--text-light);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .register__form button:hover {
+            background-color: var(--highlight-color); /* Cyan */
+        }
+
+        .register__form .form__footer {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .register__form .form__footer a {
+            color: var(--primary-color); /* Teal Blue */
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .register__form .form__footer a:hover {
+            color: var(--highlight-color); /* Cyan */
+        }
+
+        @media (min-width: 768px) {
+            .register__container {
+                padding: 3rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-md w-96">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Create Account</h2>
+            
+            <form method="post" class="space-y-4">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" 
+                        class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition duration-200">
+                    Register
+                </button>
+            </form>
+            
+            <div class="mt-4 text-center">
+                <p class="text-gray-600">
+                    Already have an account? 
+                    <a href="{% url 'login' %}" class="text-green-600 hover:text-green-700">Sign In</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const scrollRevealOption = {
+                distance: "50px",
+                origin: "bottom",
+                duration: 1000,
+            };
+
+            ScrollReveal().reveal(".register__container h2", {
+                ...scrollRevealOption,
+                delay: 500,
+            });
+
+            ScrollReveal().reveal(".register__form", {
+                ...scrollRevealOption,
+                delay: 1000,
+            });
+        });
+
+        function handleSignUp(event) {
+            event.preventDefault(); // Prevent the default form submission
+            window.location.href = "dashboard.html"; // Redirect to dashboard.html
+            return false; // Ensure the form does not submit
+        }
+    </script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Register - SkillEx</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
+
+        :root {
+            --primary-color: #20B2AA; /* Teal Blue */
+            --highlight-color: #00FFFF; /* Cyan */
+            --text-dark: #B2BEB5; /* Ash Gray */
+            --text-light: #E0E0E0;
+            --background-color: #262626; /* Charcoal Black */
+            --max-width: 1200px;
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Raleway", sans-serif;
+            background-color: var(--background-color); /* Charcoal Black */
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .register__container {
+            background-color: #1e1e1e;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .register__container h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--text-dark); /* Ash Gray */
+        }
+
+        .register__form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .register__form input {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: var(--text-light);
+            outline: none;
+            transition: background-color 0.3s;
+        }
+
+        .register__form input:focus {
+            background-color: #444;
+        }
+
+        .register__form button {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--primary-color); /* Teal Blue */
+            color: var(--white);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .register__form button:hover {
+            background-color: var(--highlight-color); /* Cyan */
+        }
+
+        .register_form .form_footer {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .register_form .form_footer a {
+            color: var(--primary-color); /* Teal Blue */
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .register_form .form_footer a:hover {
+            color: var(--highlight-color); /* Cyan */
+        }
+
+        @media (min-width: 768px) {
+            .register__container {
+                padding: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register__container">
+        <h2>Create Account</h2>
+        
+        <form method="post" class="register__form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Register</button>
+            
+            <div class="form__footer">
+                Already have an account? 
+                <a href="{% url 'login' %}">Sign In</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const scrollRevealOption = {
+                distance: "50px",
+                origin: "bottom",
+                duration: 1000,
+            };
+
+            ScrollReveal().reveal(".register__container h2", {
+                ...scrollRevealOption,
+                delay: 500,
+            });
+
+            ScrollReveal().reveal(".register__form", {
+                ...scrollRevealOption,
+                delay: 1000,
+            });
+        });
+
+        function handleSignUp(event) {
+            event.preventDefault(); // Prevent the default form submission
+            window.location.href = "dashboard.html"; // Redirect to dashboard.html
+            return false; // Ensure the form does not submit
+        }
+    </script>
+</body>
+</html>

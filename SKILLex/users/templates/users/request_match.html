@@ -1,0 +1,89 @@
+<form method="post" action="{% url 'request_match' %}">
+    {% csrf_token %}
+    <input type="hidden" name="receiver_id" value="{{ receiver.id }}">
+    <input type="hidden" name="sender_skill_id" value="{{ sender_skill.id }}">
+    <input type="hidden" name="receiver_skill_id" value="{{ receiver_skill.id }}">
+    <button type="submit">Send Match Request</button>
+</form>
+
+from django.db import models
+from django.contrib.auth.models import User
+
+class Skill(models.Model):
+    LEVEL_CHOICES = [
+        ('beginner', 'Beginner'),
+        ('amateur', 'Amateur'),
+        ('pro', 'Pro'),
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    skill_name = models.CharField(max_length=100)
+    level = models.CharField(max_length=10, choices=LEVEL_CHOICES)
+
+    def __str__(self):
+        return f"{self.skill_name} ({self.level})"
+
+class MatchRequest(models.Model):
+    sender = models.ForeignKey(User, related_name='sent_requests', on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, related_name='received_requests', on_delete=models.CASCADE)
+    sender_skill = models.ForeignKey(Skill, related_name='sent_skill', on_delete=models.CASCADE)
+    receiver_skill = models.ForeignKey(Skill, related_name='received_skill', on_delete=models.CASCADE)
+    status = models.CharField(
+        max_length=20,
+        choices=[('Pending', 'Pending'), ('Accepted', 'Accepted'), ('Declined', 'Declined')],
+        default='Pending'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.sender.username} matched with {self.receiver.username} for {self.sender_skill.skill_name}"
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import MatchRequest, Skill, Message
+from django.contrib.auth.models import User
+
+@login_required
+def request_match(request):
+    if request.method == 'POST':
+        receiver_id = request.POST.get('receiver_id')
+        sender_skill_id = request.POST.get('sender_skill_id')
+        receiver_skill_id = request.POST.get('receiver_skill_id')
+        
+        receiver = get_object_or_404(User, id=receiver_id)
+        sender_skill = get_object_or_404(Skill, id=sender_skill_id)
+        receiver_skill = get_object_or_404(Skill, id=receiver_skill_id)
+        
+        MatchRequest.objects.create(
+            sender=request.user,
+            receiver=receiver,
+            sender_skill=sender_skill,
+            receiver_skill=receiver_skill,
+            status='Pending'
+        )
+        return redirect('dashboard')
+    return redirect('home')
+
+@login_required
+def notifications(request):
+    sent_notifications = request.user.sent_requests.all().order_by('-created_at')
+    received_notifications = request.user.received_requests.all().order_by('-created_at')
+    return render(request, 'users/notifications.html', {
+        'sent_notifications': sent_notifications,
+        'received_notifications': received_notifications
+    })
+
+@login_required
+def chat(request, match_id):
+    match = get_object_or_404(MatchRequest, id=match_id)
+    if request.user != match.sender and request.user != match.receiver:
+        return redirect('home')
+    
+    messages = Message.objects.filter(
+        (Q(sender=request.user) & Q(receiver=match.receiver)) |
+        (Q(sender=match.receiver) & Q(receiver=request.user))
+    ).order_by('timestamp')
+    
+    return render(request, 'users/chat.html', {
+        'match': match,
+        'messages': messages
+    })

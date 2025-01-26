@@ -1,0 +1,251 @@
+{% load user_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <title>SkillEx | Notifications</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
+
+        :root {
+            --primary-color: #20B2AA; /* Teal Blue */
+            --highlight-color: #00FFFF; /* Cyan */
+            --text-dark: #B2BEB5; /* Ash Gray */
+            --text-light: #E0E0E0;
+            --background-color: #262626; /* Charcoal Black */
+            --max-width: 1200px;
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-light);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: var(--primary-color);
+        }
+
+        .nav__logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .nav__auth {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav__auth__btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav__auth__btn:first-child {
+            background-color: white;
+            color: var(--primary-color);
+        }
+
+        .nav__auth__btn:last-child {
+            border: 2px solid white;
+            color: white;
+        }
+
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification-bell::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+        }
+
+        .header__container {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .header__container h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .header__container p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .header__container a {
+            background-color: var(--highlight-color);
+            color: var(--background-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .header__container a:hover {
+            background-color: var(--primary-color);
+        }
+
+        .main__container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .section button {
+            background-color: var(--highlight-color);
+            color: var(--background-color);
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .section button:hover {
+            background-color: var(--primary-color);
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav__logo">
+            <div>Sx</div>
+            SkillEx
+        </div>
+        <div class="nav__auth">
+            <a href="{% url 'logout' %}?next={% url 'home' %}" class="nav__auth__btn">Logout</a>
+            <div class="notification-bell">
+                <i class="ri-notification-3-line"></i>
+            </div>
+        </div>
+    </nav>
+    <header class="header__container">
+        <h1>Notifications</h1>
+        <p>View your notifications and manage your requests.</p>
+    </header>
+    <main class="main__container">
+        <section class="section">
+            <h2>Requests Sent to You</h2>
+            {% if received_notifications %}
+                <div class="space-y-4">
+                    {% for notification in received_notifications %}
+                        <div class="border-b pb-4">
+                            <p class="text-gray-700">
+                                From: {{ notification.sender.username }} - {{ notification.sender_skill.skill_name }}
+                            </p>
+                            <p class="text-sm text-gray-500">Status: {{ notification.status }}</p>
+                            <p class="text-sm text-gray-500">Received: {{ notification.created_at }}</p>
+                            {% if notification.status == 'pending' %}
+                                <div class="mt-2">
+                                    <form method="post" action="{% url 'respond_to_request' notification.id %}" class="inline">
+                                        {% csrf_token %}
+                                        <button type="submit" name="action" value="accept" 
+                                                class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                                            Accept
+                                        </button>
+                                        <button type="submit" name="action" value="decline"
+                                                class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 ml-2">
+                                            Decline
+                                        </button>
+                                    </form>
+                                </div>
+                            {% elif notification.status == 'accepted' %}
+                                <div class="mt-2">
+                                    <a href="{% url 'chat' notification.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                        Start Chat
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-600">No requests received.</p>
+            {% endif %}
+        </section>
+
+        <section class="section">
+            <h2>Status of Requests Sent by You</h2>
+            {% if sent_notifications %}
+                <div class="space-y-4">
+                    {% for notification in sent_notifications %}
+                        <div class="border-b pb-4">
+                            <p class="text-gray-700">
+                                To: {{ notification.receiver.username }} - {{ notification.receiver_skill.skill_name }}
+                            </p>
+                            <p class="text-sm text-gray-500">Status: {{ notification.status }}</p>
+                            <p class="text-sm text-gray-500">Sent: {{ notification.created_at }}</p>
+                            {% if notification.status == 'accepted' %}
+                                <div class="mt-2">
+                                    <a href="{% url 'chat' notification.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                        Start Chat
+                                    </a>
+                                </div>
+                            {% else %}
+                                <div class="mt-2">
+                                    <span class="bg-gray-500 text-white px-4 py-2 rounded">
+                                        Pending Request
+                                    </span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-600">No requests sent.</p>
+            {% endif %}
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 SkillEx. All rights reserved.</p>
+    </footer>
+</body>
+</html>

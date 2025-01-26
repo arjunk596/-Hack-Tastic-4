@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Received Requests</title>
+</head>
+<body>
+    <h1>Received Match Requests</h1>
+    {% if received_requests %}
+        <ul>
+            {% for request in received_requests %}
+                <li>
+                    <strong>{{ request.sender.username }}</strong> - {{ request.skill.skill_name }}<br>
+                    <form method="post" action="{% url 'respond_to_request' request.id %}">
+                        {% csrf_token %}
+                        <button type="submit" name="action" value="accept">Accept</button>
+                        <button type="submit" name="action" value="decline">Decline</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No match requests received.</p>
+    {% endif %}
+</body>
+</html>
